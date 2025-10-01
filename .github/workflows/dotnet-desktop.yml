@@ -1,0 +1,29 @@
+name: maui-applicatie-run-test
+
+on:
+  push:
+    branches: [ "main", "release", "dev"]
+  pull_request:
+    branches: [ "main", "release", "dev"]
+
+jobs:
+  test_applicatie:
+    runs-on: windows-latest
+    steps:
+      - name: Haal de repository op
+        uses: actions/checkout@v4
+ 
+      # Install the .NET Core workload
+      - name: Install .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+             dotnet-version: 8.0.x
+ 
+      - name: Installeer MAUI workloads
+        run: dotnet workload install maui-windows
+      
+      - name: Herstel afhankelijkheden
+        run: dotnet restore
+ 
+      - name: Bouw Grocery.App project
+        run: dotnet build  --configuration Release -f net8.0-windows10.0.19041.0 /p:RuntimeIdentifierOverride=win-x64
