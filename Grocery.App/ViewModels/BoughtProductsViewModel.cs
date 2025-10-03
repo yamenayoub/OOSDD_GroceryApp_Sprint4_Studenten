@@ -20,10 +20,25 @@ namespace Grocery.App.ViewModels
         {
             _boughtProductsService = boughtProductsService;
             Products = new(productService.GetAll());
+
+            // Default selected product to the first in the list if available
+            if (Products.Count > 0)
+            {
+                SelectedProduct = Products[0];
+            }
         }
 
         partial void OnSelectedProductChanged(Product? oldValue, Product newValue)
         {
+            if (oldValue != newValue)
+            {
+                var boughtProducts = _boughtProductsService.Get(newValue?.Id);
+                BoughtProductsList.Clear();
+                foreach (var item in boughtProducts)
+                {
+                    BoughtProductsList.Add(item);
+                }
+            }
             //Zorg dat de lijst BoughtProductsList met de gegevens die passen bij het geselecteerde product. 
         }
 

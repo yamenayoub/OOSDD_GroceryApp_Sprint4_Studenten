@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using Grocery.App.Views;
 using Grocery.Core.Interfaces.Services;
 using Grocery.Core.Models;
+using Grocery.Core.Services;
 using System.Collections.ObjectModel;
 using System.Text.Json;
 
@@ -15,6 +16,8 @@ namespace Grocery.App.ViewModels
         private readonly IGroceryListItemsService _groceryListItemsService;
         private readonly IProductService _productService;
         private readonly IFileSaverService _fileSaverService;
+        private readonly IBoughtProductsService _boughtProductService;
+        private readonly GlobalViewModel _global;
         private string searchText = "";
 
         public ObservableCollection<GroceryListItem> MyGroceryListItems { get; set; } = [];
@@ -25,12 +28,18 @@ namespace Grocery.App.ViewModels
         [ObservableProperty]
         string myMessage;
 
-        public GroceryListItemsViewModel(IGroceryListItemsService groceryListItemsService, IProductService productService, IFileSaverService fileSaverService)
+        [ObservableProperty]
+        Client client;
+
+        public GroceryListItemsViewModel(IGroceryListItemsService groceryListItemsService, IProductService productService, IFileSaverService fileSaverService, IBoughtProductsService BoughtProductsService, GlobalViewModel global)
         {
             _groceryListItemsService = groceryListItemsService;
             _productService = productService;
             _fileSaverService = fileSaverService;
+            _boughtProductService = BoughtProductsService;
             Load(groceryList.Id);
+            _global = global;
+            client = _global.Client;
         }
 
         private void Load(int id)
@@ -118,6 +127,21 @@ namespace Grocery.App.ViewModels
             item.Product.Stock++;
             _productService.Update(item.Product);
             OnGroceryListChanged(GroceryList);
+        }
+
+        [RelayCommand]
+        void ShowBoughtProducts()
+        {
+            // Als de Role van de client admin is 
+            if (_global.Client.Role == Core.Enums.Role.Admin)
+            {     
+                AsyncShowBoughtProducts();
+            }
+        }
+
+        public async void AsyncShowBoughtProducts()
+        {
+            await Shell.Current.GoToAsync(nameof(Views.BoughtProductsView));
         }
     }
 }
