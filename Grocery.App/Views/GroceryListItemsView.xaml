@@ -8,6 +8,7 @@
              Title="GroceryListItemsView">
 
     <ContentPage.ToolbarItems>
+        <ToolbarItem Text="{Binding Client.Name}" Command="{Binding ShowBoughtProductsCommand}"/>
         <ToolbarItem Text="Wijzig kleur" Command="{Binding ChangeColorCommand}" IconImageSource="{FontImage Glyph='&#xf30c;', Color=Black, Size=22}" />
         <ToolbarItem Text="Deel boodschappenlijst" Command="{Binding ShareGroceryListCommand}" IconImageSource="{FontImage Glyph='&#xf30c;', Color=Black, Size=22}" />
     </ContentPage.ToolbarItems>
