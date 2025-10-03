@@ -1,46 +1,78 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:vm="clr-namespace:Grocery.App.ViewModels"
-             xmlns:m="clr-namespace:Grocery.Core.Models;assembly=Grocery.Core"
-             x:Class="Grocery.App.Views.BoughtProductsView"
-             x:DataType="vm:BoughtProductsViewModel"
-             Title="BoughtProductsView">
+<ContentPage
+    x:Class="Grocery.App.Views.BoughtProductsView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:m="clr-namespace:Grocery.Core.Models;assembly=Grocery.Core"
+    xmlns:vm="clr-namespace:Grocery.App.ViewModels"
+    Title="BoughtProductsView"
+    x:DataType="vm:BoughtProductsViewModel">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="4*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="4*" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="80"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="80" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Picker Grid.Column="0" Grid.Row="0" Margin="10,0,0,0" Title="Klik op onderstaand pijltje om een product te selecteren:"
-        ItemsSource="{Binding Products}"
-        SelectedItem="{Binding SelectedProduct, Mode=TwoWay}" 
-        SelectedIndexChanged="Picker_SelectedIndexChanged"
-        BackgroundColor="{StaticResource Primary}"
-            TextColor="{StaticResource Secondary}">
-        </Picker>
-        <Border Grid.Row="1" Grid.Column="0" Stroke="#C49B33" StrokeThickness="4" Padding="5" Margin="5" HorizontalOptions="Center">
-            <CollectionView ItemsSource="{Binding BoughtProductsList}" Margin="5" HorizontalOptions="End" SelectionMode="Single">
+        <Picker
+            Title="Klik op onderstaand pijltje om een product te selecteren:"
+            Grid.Row="0"
+            Grid.Column="0"
+            Margin="10,0,0,0"
+            BackgroundColor="{StaticResource Primary}"
+            ItemsSource="{Binding Products}"
+            ItemDisplayBinding="{Binding Name}"
+            SelectedItem="{Binding SelectedProduct, Mode=TwoWay}"
+            TextColor="{StaticResource Secondary}" />
+        <Border
+            Grid.Row="1"
+            Grid.Column="0"
+            Margin="5"
+            Padding="5"
+            HorizontalOptions="Center"
+            Stroke="#C49B33"
+            StrokeThickness="4">
+            <CollectionView
+                Margin="5"
+                HorizontalOptions="End"
+                ItemsSource="{Binding BoughtProductsList}"
+                SelectionMode="Single">
                 <CollectionView.ItemsLayout>
-                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
+                    <LinearItemsLayout ItemSpacing="10" Orientation="Vertical" />
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="m:BoughtProducts" >
+                    <DataTemplate x:DataType="m:BoughtProducts">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
-                            <!-- Toon hier de naam van de Client naam van de boodschappenlijst -->
+                            <!--  Toon hier de naam van de Client en de naam van de boodschappenlijst  -->
+                            <Label
+                                Grid.Column="0"
+                                FontAttributes="Bold"
+                                FontSize="16"
+                                HorizontalOptions="Start"
+                                Text="{Binding Client.Name}"
+                                VerticalOptions="Center" />
+                            <Label
+                                Grid.Column="1"
+                                FontSize="16"
+                                HorizontalOptions="End"
+                                Text="{Binding GroceryList.Name}"
+                                VerticalOptions="Center" />
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
                 <CollectionView.EmptyView>
                     <ContentView>
-                        <Label Text="Er zijn geen verkochte producten" FontSize="18" FontAttributes="Bold" HorizontalTextAlignment="Center"/>
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="18"
+                            HorizontalTextAlignment="Center"
+                            Text="Er zijn geen verkochte producten" />
                     </ContentView>
                 </CollectionView.EmptyView>
             </CollectionView>
